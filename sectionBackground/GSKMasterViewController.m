@@ -8,106 +8,145 @@
 
 #import "GSKMasterViewController.h"
 
-#import "GSKDetailViewController.h"
+#import "GSKCell.h"
+#import "GSKSectionBackground.h"
 
-@interface GSKMasterViewController () {
-    NSMutableArray *_objects;
-}
+static const NSUInteger DefaultSections             = 5;
+static const NSUInteger ItemsPerSectionMin   = 5;
+static const NSUInteger ItemsPerSectionMax   = 5;
+
+
+
+@interface GSKMasterViewController ()
+
+@property (nonatomic, strong) NSMutableArray * sections; // array of arrays
+@property (nonatomic, strong) NSArray * colors;
+@property (nonatomic, strong) NSArray * sectionColors;
+
 @end
 
 @implementation GSKMasterViewController
 
-- (void)awakeFromNib
-{
-    [super awakeFromNib];
-}
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view, typically from a nib.
-    self.navigationItem.leftBarButtonItem = self.editButtonItem;
-
-    UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(insertNewObject:)];
-    self.navigationItem.rightBarButtonItem = addButton;
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-- (void)insertNewObject:(id)sender
-{
-    if (!_objects) {
-        _objects = [[NSMutableArray alloc] init];
+    
+    // initialize possible colors
+    self.colors = @[UIColor.redColor, UIColor.blueColor, UIColor.greenColor, UIColor.yellowColor, UIColor.blackColor, UIColor.lightGrayColor, UIColor.orangeColor, UIColor.purpleColor, UIColor.cyanColor, UIColor.magentaColor];
+    self.sectionColors = @[UIColor.brownColor, UIColor.darkGrayColor];
+    
+    // initialize model, aka add random cells
+    self.sections = [NSMutableArray new];
+    for(NSUInteger s=0; s<DefaultSections; ++s) {
+        NSMutableArray * section = [NSMutableArray new];
+        
+        NSUInteger numItems = ItemsPerSectionMin + arc4random_uniform(ItemsPerSectionMax-ItemsPerSectionMin);
+        for(int i=0; i<numItems; ++i) {
+            NSUInteger colorIndex = arc4random_uniform(self.colors.count);
+            UIColor * color = self.colors[colorIndex];
+            [section addObject:color];
+        }
+        
+        [self.sections addObject:section];
     }
-    [_objects insertObject:[NSDate date] atIndex:0];
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
-    [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+    
+    // add buttons to navigation bar
+    UIBarButtonItem * addSectionButton = [[UIBarButtonItem alloc] initWithTitle:@"Section" style:UIBarButtonItemStyleBordered target:self action:@selector(addSection)];
+    UIBarButtonItem *addItemButton = [[UIBarButtonItem alloc] initWithTitle:@"Item" style:UIBarButtonItemStyleBordered target:self action:@selector(addItemToLastSection)];
+    
+    self.navigationItem.rightBarButtonItems = @[addSectionButton, addItemButton];
+    
+    // register collection view cells
+    [self.collectionView registerClass:[GSKCell class]
+            forCellWithReuseIdentifier:NSStringFromClass([GSKCell class])];
+    
+    // add and configure layout
+    const NSUInteger cellsPerLine = 3;
+    const CGFloat viewWidth = self.collectionView.bounds.size.width;
+    const CGFloat totalCellWidth = viewWidth * 0.9;
+    const CGFloat cellWidth = totalCellWidth / cellsPerLine;
+    const CGFloat cellHeight = cellWidth / 1.6180339887; // golden ratio
+    const CGFloat spacing = (viewWidth - totalCellWidth) / (cellsPerLine+1) / 2;
+    
+    GSKSectionBackgroundFlowLayout * layout = [[GSKSectionBackgroundFlowLayout alloc] init];
+    layout.itemSize = CGSizeMake(cellWidth, cellHeight);
+    layout.minimumLineSpacing = spacing;
+    layout.sectionInset = UIEdgeInsetsMake(spacing, spacing, spacing, spacing);
+    layout.minimumInteritemSpacing = 0;
+    
+    [self.collectionView registerClass:[GSKSectionBackground class]
+            forSupplementaryViewOfKind:GSKElementKindSectionBackground
+                   withReuseIdentifier:NSStringFromClass([GSKSectionBackground class])];
+    
+    self.collectionView.collectionViewLayout = layout;
+}
+
+- (void) addSection
+{
+    [self.sections addObject: [NSMutableArray new]];
+    NSUInteger sectionIndex = self.sections.count-1;
+    
+    NSIndexSet * index = [NSIndexSet indexSetWithIndex:sectionIndex];
+    [self.collectionView insertSections:index];
+    
+    [self addItemToLastSection];
+}
+
+- (void) addItemToLastSection
+{
+    NSUInteger colorIndex = arc4random_uniform(self.colors.count);
+    UIColor * color = self.colors[colorIndex];
+    
+    NSUInteger sectionIndex = self.sections.count-1;
+    NSMutableArray * section = self.sections[sectionIndex];
+    NSUInteger itemIndex = section.count;
+    [section addObject:color];
+    
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:itemIndex
+                                                inSection:sectionIndex];
+    [self.collectionView insertItemsAtIndexPaths:@[indexPath]];
+    [self.collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionTop animated:YES];
 }
 
 #pragma mark - Table View
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
 {
-    return 1;
+    return self.sections.count;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (NSInteger)collectionView:(UICollectionView *)collectionView
+     numberOfItemsInSection:(NSInteger)section
 {
-    return _objects.count;
+    return [self.sections[section] count];
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView
+                  cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
-
-    NSDate *object = _objects[indexPath.row];
-    cell.textLabel.text = [object description];
+    GSKCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:NSStringFromClass([GSKCell class])
+                                                               forIndexPath:indexPath];
+    cell.backgroundColor = self.sections[indexPath.section][indexPath.item];
     return cell;
 }
 
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView
+           viewForSupplementaryElementOfKind:(NSString *)kind
+                                 atIndexPath:(NSIndexPath *)indexPath
 {
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
+    GSKSectionBackground * background = [collectionView dequeueReusableSupplementaryViewOfKind:GSKElementKindSectionBackground
+                                                                                      withReuseIdentifier:NSStringFromClass([GSKSectionBackground class])
+                                                                                             forIndexPath:indexPath];
+    background.backgroundColor = self.sectionColors[indexPath.section%self.sectionColors.count];
+    
+    return background;
 }
 
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+- (BOOL)     collectionView:(UICollectionView*)collectionView
+displaysBackgroundAtSection:(NSUInteger)section
 {
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        [_objects removeObjectAtIndex:indexPath.row];
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view.
-    }
+    return section%3!=0;
 }
 
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
-{
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    if ([[segue identifier] isEqualToString:@"showDetail"]) {
-        NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
-        NSDate *object = _objects[indexPath.row];
-        [[segue destinationViewController] setDetailItem:object];
-    }
-}
 
 @end

@@ -15,13 +15,15 @@
 		86E2AE8F190796A90050DF8B /* GSKAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 86E2AE8E190796A90050DF8B /* GSKAppDelegate.m */; };
 		86E2AE92190796AA0050DF8B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 86E2AE90190796AA0050DF8B /* Main.storyboard */; };
 		86E2AE95190796AA0050DF8B /* GSKMasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86E2AE94190796AA0050DF8B /* GSKMasterViewController.m */; };
-		86E2AE98190796AA0050DF8B /* GSKDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86E2AE97190796AA0050DF8B /* GSKDetailViewController.m */; };
 		86E2AE9A190796AA0050DF8B /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 86E2AE99190796AA0050DF8B /* Images.xcassets */; };
 		86E2AEA1190796AA0050DF8B /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86E2AEA0190796AA0050DF8B /* XCTest.framework */; };
 		86E2AEA2190796AA0050DF8B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86E2AE7E190796A90050DF8B /* Foundation.framework */; };
 		86E2AEA3190796AA0050DF8B /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86E2AE82190796A90050DF8B /* UIKit.framework */; };
 		86E2AEAB190796AA0050DF8B /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 86E2AEA9190796AA0050DF8B /* InfoPlist.strings */; };
 		86E2AEAD190796AA0050DF8B /* sectionBackgroundTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 86E2AEAC190796AA0050DF8B /* sectionBackgroundTests.m */; };
+		86E2AEB819079C6B0050DF8B /* GSKCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 86E2AEB719079C6B0050DF8B /* GSKCell.m */; };
+		86E2AEBB19079C880050DF8B /* GSKSectionBackgroundFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 86E2AEBA19079C880050DF8B /* GSKSectionBackgroundFlowLayout.m */; };
+		86E2AEBE19079CD60050DF8B /* GSKSectionBackground.m in Sources */ = {isa = PBXBuildFile; fileRef = 86E2AEBD19079CD60050DF8B /* GSKSectionBackground.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,14 +50,18 @@
 		86E2AE91190796AA0050DF8B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		86E2AE93190796AA0050DF8B /* GSKMasterViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GSKMasterViewController.h; sourceTree = "<group>"; };
 		86E2AE94190796AA0050DF8B /* GSKMasterViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GSKMasterViewController.m; sourceTree = "<group>"; };
-		86E2AE96190796AA0050DF8B /* GSKDetailViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GSKDetailViewController.h; sourceTree = "<group>"; };
-		86E2AE97190796AA0050DF8B /* GSKDetailViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GSKDetailViewController.m; sourceTree = "<group>"; };
 		86E2AE99190796AA0050DF8B /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		86E2AE9F190796AA0050DF8B /* sectionBackgroundTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = sectionBackgroundTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		86E2AEA0190796AA0050DF8B /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		86E2AEA8190796AA0050DF8B /* sectionBackgroundTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "sectionBackgroundTests-Info.plist"; sourceTree = "<group>"; };
 		86E2AEAA190796AA0050DF8B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		86E2AEAC190796AA0050DF8B /* sectionBackgroundTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = sectionBackgroundTests.m; sourceTree = "<group>"; };
+		86E2AEB619079C6B0050DF8B /* GSKCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSKCell.h; sourceTree = "<group>"; };
+		86E2AEB719079C6B0050DF8B /* GSKCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GSKCell.m; sourceTree = "<group>"; };
+		86E2AEB919079C880050DF8B /* GSKSectionBackgroundFlowLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSKSectionBackgroundFlowLayout.h; sourceTree = "<group>"; };
+		86E2AEBA19079C880050DF8B /* GSKSectionBackgroundFlowLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GSKSectionBackgroundFlowLayout.m; sourceTree = "<group>"; };
+		86E2AEBC19079CD60050DF8B /* GSKSectionBackground.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSKSectionBackground.h; sourceTree = "<group>"; };
+		86E2AEBD19079CD60050DF8B /* GSKSectionBackground.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GSKSectionBackground.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -120,10 +126,14 @@
 				86E2AE90190796AA0050DF8B /* Main.storyboard */,
 				86E2AE93190796AA0050DF8B /* GSKMasterViewController.h */,
 				86E2AE94190796AA0050DF8B /* GSKMasterViewController.m */,
-				86E2AE96190796AA0050DF8B /* GSKDetailViewController.h */,
-				86E2AE97190796AA0050DF8B /* GSKDetailViewController.m */,
 				86E2AE99190796AA0050DF8B /* Images.xcassets */,
 				86E2AE85190796A90050DF8B /* Supporting Files */,
+				86E2AEB619079C6B0050DF8B /* GSKCell.h */,
+				86E2AEB719079C6B0050DF8B /* GSKCell.m */,
+				86E2AEB919079C880050DF8B /* GSKSectionBackgroundFlowLayout.h */,
+				86E2AEBA19079C880050DF8B /* GSKSectionBackgroundFlowLayout.m */,
+				86E2AEBC19079CD60050DF8B /* GSKSectionBackground.h */,
+				86E2AEBD19079CD60050DF8B /* GSKSectionBackground.m */,
 			);
 			path = sectionBackground;
 			sourceTree = "<group>";
@@ -255,10 +265,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				86E2AEBB19079C880050DF8B /* GSKSectionBackgroundFlowLayout.m in Sources */,
 				86E2AE8F190796A90050DF8B /* GSKAppDelegate.m in Sources */,
 				86E2AE95190796AA0050DF8B /* GSKMasterViewController.m in Sources */,
+				86E2AEBE19079CD60050DF8B /* GSKSectionBackground.m in Sources */,
+				86E2AEB819079C6B0050DF8B /* GSKCell.m in Sources */,
 				86E2AE8B190796A90050DF8B /* main.m in Sources */,
-				86E2AE98190796AA0050DF8B /* GSKDetailViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

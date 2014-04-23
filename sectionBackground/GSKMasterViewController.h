@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "GSKSectionBackgroundFlowLayout.h"
 
-@interface GSKMasterViewController : UITableViewController
+@interface GSKMasterViewController : UICollectionViewController <GSKSectionBackgroundFlowLayoutDelegate>
 
 @end
