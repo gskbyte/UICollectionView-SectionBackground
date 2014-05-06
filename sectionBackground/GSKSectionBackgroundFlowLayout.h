@@ -19,7 +19,7 @@ static NSString *const GSKElementKindSectionBackground = @"GSKElementKindSection
 
 @optional
 
-// NO by default
+// YES by default
 - (BOOL)     collectionView:(UICollectionView*)collectionView
 displaysBackgroundAtSection:(NSUInteger)section;
 

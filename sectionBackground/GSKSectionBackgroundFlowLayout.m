@@ -16,31 +16,26 @@
 
 - (NSArray *)layoutAttributesForElementsInRect:(CGRect)rect
 {
-    NSMutableArray *attributes = [NSMutableArray array];
+    NSMutableArray *attributes = [NSMutableArray arrayWithArray:[super layoutAttributesForElementsInRect:rect]];
     
-    [attributes addObjectsFromArray:[super layoutAttributesForElementsInRect:rect]];
-    
-    if([self.collectionView.delegate respondsToSelector:@selector(collectionView:displaysBackgroundAtSection:)]) {
-        // 1. get visible sections
-        NSMutableSet * displayedSections = [NSMutableSet new];
-        NSInteger lastIndex = -1;
-        for(UICollectionViewLayoutAttributes * attr in attributes) {
-            //if(attr.indexPath.section != lastIndex && !attr.hidden) {
-                lastIndex = attr.indexPath.section;
-                [displayedSections addObject:@(lastIndex)];
-            //}
-        }
-        
-        // 2. compute rects for sections that display it, and add attributes for those that intersect
-        for(NSNumber * section in displayedSections) {
-            id<GSKSectionBackgroundFlowLayoutDelegate> delegate = (id<GSKSectionBackgroundFlowLayoutDelegate>) self.collectionView.delegate;
-            if( [delegate collectionView:self.collectionView displaysBackgroundAtSection:section.unsignedIntegerValue] ) {
-                UICollectionViewLayoutAttributes * attr = [self layoutAttributesForBackgroundAtSection:section.unsignedIntegerValue];
-                [attributes addObject:attr];
-            }
-        }
+    // 1. get visible sections
+    NSMutableSet * displayedSections = [NSMutableSet new];
+    NSInteger lastIndex = -1;
+    for(UICollectionViewLayoutAttributes * attr in attributes) {
+        lastIndex = attr.indexPath.section;
+        [displayedSections addObject:@(lastIndex)];
     }
     
+    // 2. compute rects for sections that display it, and add attributes for those that intersect
+    for(NSNumber * section in displayedSections) {
+        BOOL displaysBackground = YES;
+        if([self.collectionView.delegate respondsToSelector:@selector(collectionView:displaysBackgroundAtSection:)]) {
+            id<GSKSectionBackgroundFlowLayoutDelegate> delegate = (id<GSKSectionBackgroundFlowLayoutDelegate>) self.collectionView.delegate;
+            displaysBackground = [delegate collectionView:self.collectionView displaysBackgroundAtSection:section.unsignedIntegerValue];
+        }
+        UICollectionViewLayoutAttributes * attr = [self layoutAttributesForBackgroundAtSection:section.unsignedIntegerValue];
+        [attributes addObject:attr];
+    }
     
     return attributes;
 }
@@ -66,14 +61,13 @@
     
     UICollectionViewLayoutAttributes * firstAttr = [self layoutAttributesForItemAtIndexPath:indexPath]; // it will be already (section,0)
     
-    
     CGRect frame;
     frame.origin.x = firstAttr.frame.origin.x - self.sectionInset.left;
     frame.origin.y = firstAttr.frame.origin.y - self.sectionInset.top;
     
     frame.size.width = self.collectionView.bounds.size.width;
     
-    NSUInteger numItems = [self.collectionView numberOfItemsInSection:section];    
+    NSUInteger numItems = [self.collectionView numberOfItemsInSection:section];
     
     CGFloat cellsPerLine = floorf(self.collectionView.bounds.size.width / self.itemSize.width);
     NSUInteger numLines = ceilf(numItems / (float)cellsPerLine);
@@ -82,6 +76,7 @@
     self.sectionInset.top + self.sectionInset.bottom;
     
     attr.frame = frame;
+    
     return attr;
 }
 

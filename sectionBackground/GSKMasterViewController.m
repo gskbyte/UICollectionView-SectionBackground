@@ -11,9 +11,9 @@
 #import "GSKCell.h"
 #import "GSKSectionBackground.h"
 
-static const NSUInteger DefaultSections             = 5;
-static const NSUInteger ItemsPerSectionMin   = 5;
-static const NSUInteger ItemsPerSectionMax   = 5;
+static const NSUInteger DefaultSections             = 50;
+static const NSUInteger ItemsPerSectionMin   = 1;
+static const NSUInteger ItemsPerSectionMax   = 7;
 
 
 
@@ -66,7 +66,7 @@ static const NSUInteger ItemsPerSectionMax   = 5;
     const CGFloat totalCellWidth = viewWidth * 0.9;
     const CGFloat cellWidth = totalCellWidth / cellsPerLine;
     const CGFloat cellHeight = cellWidth / 1.6180339887; // golden ratio
-    const CGFloat spacing = (viewWidth - totalCellWidth) / (cellsPerLine+1) / 2;
+    const CGFloat spacing = (viewWidth - totalCellWidth) / (cellsPerLine+1);
     
     GSKSectionBackgroundFlowLayout * layout = [[GSKSectionBackgroundFlowLayout alloc] init];
     layout.itemSize = CGSizeMake(cellWidth, cellHeight);
@@ -145,7 +145,7 @@ static const NSUInteger ItemsPerSectionMax   = 5;
 - (BOOL)     collectionView:(UICollectionView*)collectionView
 displaysBackgroundAtSection:(NSUInteger)section
 {
-    return section%3!=0;
+    return YES; //section%3!=0;
 }
 
 
